@@ -116,19 +116,29 @@ void setEyeColor()     { setColor(tft.color565(255, 186, 31)); }
 void setHeartColor()   { setColor(tft.color565(0, 0, 255)); }
 
 void printDate(const DateTime& dt) {
-  char hour[3];
-  char minute[3];
-  snprintf(hour, sizeof(hour), "%02u", dt.hour());
-  snprintf(minute, sizeof(minute), "%02u", dt.minute());
+  uint8_t hour12 = dt.hour() % 12;
+  if (hour12 == 0) hour12 = 12;
+  const char* ampm = dt.hour() < 12 ? "AM" : "PM";
 
-  tft.setTextColor(tft.color565(255, 186, 31), ST77XX_BLACK);
-  tft.setTextSize(4);
-  tft.setCursor(5, 40);
-  tft.print(hour);
-  tft.fillCircle(62, 50, 3, tft.color565(255, 186, 31));
-  tft.fillCircle(62, 70, 3, tft.color565(255, 186, 31));
-  tft.setCursor(75, 40);
-  tft.print(minute);
+  char timeStr[6];
+  snprintf(timeStr, sizeof(timeStr), "%02u:%02u", hour12, dt.minute());
+
+  uint16_t color = tft.color565(255, 186, 31);
+
+  int16_t tw = 5 * 6 * 3;
+  int16_t aw = 3 * 6 * 2;
+  int16_t x0 = (160 - (tw + aw)) / 2;
+
+  tft.setTextColor(color, ST77XX_BLACK);
+
+  tft.setTextSize(3);
+  tft.setCursor(x0, 40);
+  tft.print(timeStr);
+
+  tft.setTextSize(2);
+  tft.setCursor(x0 + tw, 47);
+  tft.print(" ");
+  tft.print(ampm);
 }
 
 int drawEyes(int frame) {
