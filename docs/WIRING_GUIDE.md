@@ -14,8 +14,10 @@ reacts to vibration with a heart animation.
 | HW-084 | DS1307 RTC module with coin cell backup (I2C) |
 | 1.8" TFT LCD | 128×160 RGB display, ST7735 driver, 8-pin header |
 | Vibration sensor | SW-420 or similar — digital/analog vibration switch |
+| 8Ω 0.25W speaker | Adafruit "Thin Plastic Speaker w/Wires" — plays melody on vibration |
+| 100Ω resistor | Current-limiter for speaker (protects Nano pin and speaker coil) |
 | USB power cable | Micro-USB for Nano |
-| Hookup wire | Female-to-female dupont, ~10 wires |
+| Hookup wire | Female-to-female dupont, ~12 wires |
 | 3D printed enclosure | Custom housing for all components |
 
 ### TFT module pinout (label order on module)
@@ -55,6 +57,18 @@ GND VCC SCL SDA RES DC CS BL
 | GND | GND | Black |
 | VCC | 5V | Red |
 | OUT (DO) | A7 | Orange |
+
+### Speaker (to Nano)
+
+| Speaker | Nano Pin | Cable Color |
+|---------|----------|-------------|
+| (+) lead | D11 *(via 100Ω resistor)* | Blue |
+| (−) lead | GND | Black |
+
+**Important**: Wire the 100Ω resistor in series with the speaker's positive lead.
+Without it, the 8Ω coil draws ~625 mA peak from the Nano pin (far above the 40 mA
+maximum). The resistor limits current to ~31 mA and prevents damaging the pin or
+the 0.25W speaker coil.
 
 ## Why These Pin Assignments?
 
@@ -124,13 +138,28 @@ Some vibration modules have an AO (analog out) pin. The code uses analog read
 (A7) so either DO or AO works. If using DO, the threshold might need
 adjustment — see the `THRESHOLD` define in the code.
 
-### 5. Connect Power
+### 5. Connect the Speaker
+
+1. Solder or twist the **100Ω resistor** to the speaker's **positive** (usually
+   red) wire
+2. Connect the free end of the resistor → **D11**
+3. Connect the speaker's **negative** (usually black) wire → **GND**
+
+```
+Nano D11 ─── 100Ω ─── Speaker(+) ─── Speaker(−) ─── GND
+```
+
+The 100Ω resistor is essential — without it the 8Ω coil would draw ~625 mA
+peak from the Nano pin (ATmega328P max is 40 mA). The resistor limits current
+to ~31 mA, which is safe for both the pin and the 0.25W speaker.
+
+### 6. Connect Power
 
 The Nano is powered via its micro-USB port. 5V and GND from the Nano's
 regulator feed the RTC and vibration sensor. The TFT uses the 3.3V rail from
 the Nano's onboard regulator.
 
-### 6. Verify Continuity
+### 7. Verify Continuity
 
 Before plugging in USB, double-check with a multimeter:
 
@@ -147,7 +176,8 @@ Before plugging in USB, double-check with a multimeter:
 | ST7735 TFT (active) | ~30 mA |
 | HW-084 RTC | ~1 mA |
 | Vibration sensor | ~1 mA |
-| **Total** | **~47 mA** |
+| 8Ω speaker (active) | ~5 mA (via 100Ω resistor) |
+| **Total** | **~52 mA** |
 
 Well within the Nano's USB power budget (500 mA). No external power supply
 needed.
@@ -191,6 +221,8 @@ When designing or printing the enclosure, consider:
 | No time shown | HW-084 not connected; check A4/A5/SDA/SCL |
 | Wrong time after power off | CR2032 battery missing or dead in HW-084 |
 | Vibration not detected | Sensor GND not connected; threshold too high (`THRESHOLD`) |
+| No sound from speaker | Resistor missing or speaker ± reversed; check D11 connection |
+| Speaker sounds distorted/noisy | Missing 100Ω series resistor (overloading pin); or melody data issue |
 | Won't upload | Wrong bootloader setting; try "Old Bootloader" |
 
 ## Code Reference
@@ -204,6 +236,8 @@ Key pin defines (from `astrobot_hw084.ino`):
 #define TFT_MOSI A2  // LCD SPI data
 #define TFT_SCLK A1  // LCD SPI clock
 #define TFT_BL   A0  // LCD backlight
+
+#define SPEAKER_PIN 11          // Melody output (via 100Ω resistor to speaker)
 
 #define VIBRATION_SENSOR A7  // Vibration sensor analog input
 #define THRESHOLD 500        // Vibration detection threshold
