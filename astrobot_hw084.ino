@@ -16,8 +16,8 @@
 
 // Alarm clock
 #define ALARM_ENABLED   true
-#define ALARM_HOUR      20
-#define ALARM_MINUTE    16
+#define ALARM_HOUR      6
+#define ALARM_MINUTE    15
 #define WEEKDAYS_ONLY   true
 
 // Vibration sensor

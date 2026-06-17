@@ -41,11 +41,28 @@ Install these via the Arduino Library Manager:
 
 ```
 astrobot_hw084/
-├── astrobot_hw084.ino    # Main sketch
-├── pixel_data.h          # All 23 eye/heart frames as PROGMEM arrays
+├── astrobot_hw084.ino      # Main sketch
+├── pixel_data.h            # All 23 eye/heart frames as PROGMEM arrays
+├── notes.h                 # Pin mappings, constants, and notes
+├── HOWITWORKS.md           # Under-the-hood explanation
+├── README.md
+├── .gitignore
+├── 3d/
+│   └── astrobot-final-version.3mf   # 3D-printable enclosure
 ├── docs/
-│   └── WIRING_GUIDE.md   # Step-by-step build instructions
-└── README.md
+│   └── WIRING_GUIDE.md     # Step-by-step build instructions
+├── eyes/
+│   ├── ImagesToCArray.py   # PNG → PROGMEM C array converter
+│   ├── normal_eye/         # 5 normal eye animation frames (PNG)
+│   │   ├── astrobot1-5.png
+│   │   └── output.h
+│   ├── heart_eye/          # 13 heart eye animation frames (PNG)
+│   │   ├── astrobot11-23.png
+│   │   └── output.h
+│   └── .gitignore
+└── music/
+    ├── Light MIDI - Astro Bot Theme.mid
+    └── Light MIDI - Astro Bot Theme.mp3
 ```
 
 
