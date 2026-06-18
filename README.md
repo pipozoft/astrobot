@@ -1,4 +1,47 @@
 # Astrobot
+```
+                                                       zXULm0                                       
+                                                     []{(jnCQO                                      
+                                                     -_-]{\YuYp                                     
+                                                     _--?]})/vm                                     
+                                                     )){1[{1/j                                      
+                                                       UYt\t                                        
+                                                      0p                                            
+                                                     md                                             
+                                                     q*                                             
+                                                    mM                                              
+                                                    h                                               
+                                                   ZawZmOmwZ                                        
+                                       YOOCJZZZZZmmZOOOZOZOZqLm                                     
+                              COOOOO0O0000000000OOQk0OOOOZZZZOZwZ                                   
+                         xvzXC0OO00CJUYYYUUJLLQQQ00p000OO000OOOOOZwZ                                
+                       ]{(/jnczXYzvuuuvvvvzzUCLCUjncQQQQQ0Q0000OOOOOOwm{                            
+                       ]][{(\trncXJUYYYYUCCLLLLLLCLLLLLLLLQQQQQQQQQQQdW&&BL                         
+                       ??]][{)\fxuXJQQQQLLLLLCLCCCCJJb**W@@@@@@@@@@@@@@@@@@BB                       
+                       ---???[})\jxvzUCLLLLCCJJJUwBBBBBB@@@@@@@@@@@B%%%%%88%%%h                     
+                       ____--??[})\fxucXkhh%B%88%%%%%BBBBBBBB%%&&&&WWWWMWWWWW8B#                    
+                       __?-__--??]}{1q#MW&8%B@@@@@B%%B8&&&&&MWWWM####M######o&*Q                    
+                       ++)vf__----)CQwda*MW88%8&&88&8&&W#####*#M##o*aookbdbqd#%                     
+                       +~[nuv(__-(XYUCZwdho#W&WWMMM##M###M#*okhkddqwZUvnO00O0*O                     
+                       <<~~ruuu}_]zzXUCQOwdh**M#WM#*MakadbpwOvux:^,"``^`.rQ0wM                      
+                       ><<<~-xuvx[vvcXYJL0Zqkaa*qakwZXY}^^^,^^"^^""^^^`'.(xZhM                      
+                       i>><<~_nuuvvvcXXYUCJLQmwmmmj""^`"``"'^"^^^"^""```.\xO*%                      
+                       !ii>>><[xnuvvvzXXUJCLCZZZJ^^"`^`^"""""""^^"^"`'''.juwWC                      
+                       i!i>>><-rxnnuvzzXUJJLQZm{^^^^^^"^^^"^,;i)""^```''>xYp8                       
+                       ll!iii>>fxxnuvczXYUJQOwI^`^^^`^"^^^`;"li`":"`'''.+uCao                       
+                        I!!ii>>]jrxnuczzYYU0wz"""^;^_!;:,^",":^,;^`'`''.rv0k8                       
+                         ll!!ii>jjrxuvczYUJOwJ'^`^^\!+:"","^^^^^^"``'';rc0bWB                       
+                           ll!ii(jrxnvczYYU0qQ^^"""^^^^""",""^"""^^^^(zUQOd%                        
+                            ;l!i]fjrnuvzXYJQwL^"""""""""",,::,:;:"|XOpm00O#                         
+                              l!!}fjxnvcXXU0pX^^",,;:;;;I;;:?nJa*M&ap0CJYC                          
+                               Ili(frnucXXY0wL;;I,I;I;txb#W88#oqZQUzxnj                             
+                                 l>trxnvzYUCmq#&##W&8%8MowZLXcvzx                                   
+                                  !\frnuczXJZZmwqpbqwLYzun_                                         
+                                    \fxnuccX00OCzvxx[                                               
+                                     {|\tfrunr{                                                     
+                                                                                                    
+                                                                                                    
+```                                                                                           
 
 An expressive eye/display bot for the **Inland Nano** (Arduino Nano clone, ATmega328P) with a **1.8" ST7735 TFT**, **HW-084 DS1307 RTC**, and **vibration sensor**.
 
