@@ -7,6 +7,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
 #include <RTClib.h>
+#include <Fonts/FreeMonoBold9pt7b.h>
 #include "pixel_data.h"
 #include "notes.h"
 
@@ -16,8 +17,8 @@
 
 // Alarm clock
 #define ALARM_ENABLED   true
-#define ALARM_HOUR      6
-#define ALARM_MINUTE    15
+#define ALARM_HOUR      7
+#define ALARM_MINUTE    30
 #define WEEKDAYS_ONLY   true
 
 // Vibration sensor
@@ -150,7 +151,7 @@ void process_pixel_array_double_invert(unsigned char pixels[][2], int size) {
 unsigned long animation_interval = 200;
 
 void setBlackColor()   { setColor(ST77XX_BLACK); }
-void setEyeColor()     { setColor(tft.color565(255, 255, 255)); }
+void setEyeColor()     { setColor(tft.color565(180, 180, 180)); }
 void setHeartColor()   { setColor(tft.color565(255, 0, 0)); }
 
 // ============================================================
@@ -168,17 +169,15 @@ void printDate(const DateTime& dt) {
   t[4] = '0' + dt.minute() % 10;
   t[5] = '\0';
 
-  int16_t tw = 5 * 6 * 3;
-  int16_t aw = 3 * 6 * 2;
-  int16_t x0 = (160 - (tw + aw)) / 2;
-
-  tft.setTextColor(tft.color565(255, 186, 31), ST77XX_BLACK);
+  tft.setFont(&FreeMonoBold9pt7b);
+  tft.setTextColor(tft.color565(255, 255, 255), ST77XX_BLACK);
   tft.setTextSize(3);
-  tft.setCursor(x0, 40);
+
+  int16_t tw = 5 * 11 * 3;
+  tft.setCursor((160 - tw) / 2, 52);
   tft.print(t);
-  tft.setTextSize(2);
-  tft.setCursor(x0 + tw, 47);
-  tft.print(" ");
+
+  tft.setCursor((160 - 2 * 11 * 3) / 2, 106);
   tft.print(dt.hour() < 12 ? "AM" : "PM");
 }
 
@@ -194,23 +193,16 @@ void printAlarm(const DateTime& dt) {
   t[4] = '0' + dt.minute() % 10;
   t[5] = '\0';
 
-  int16_t tw = 5 * 6 * 3;
-  int16_t aw = 3 * 6 * 2;
-  int16_t x0 = (160 - (tw + aw)) / 2;
-
-  tft.setTextColor(tft.color565(255, 0, 0), ST77XX_BLACK);
+  tft.setFont(&FreeMonoBold9pt7b);
+  tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
   tft.setTextSize(3);
-  tft.setCursor(x0, 30);
-  tft.print(t);
-  tft.setTextSize(2);
-  tft.setCursor(x0 + tw, 37);
-  tft.print(" ");
-  tft.print(dt.hour() < 12 ? "AM" : "PM");
 
-  tft.setTextSize(2);
-  tft.setTextColor(tft.color565(255, 0, 0), ST77XX_BLACK);
-  tft.setCursor((160 - 5 * 6 * 2) / 2, 70);
-  tft.print("ALARM");
+  int16_t tw = 5 * 11 * 3;
+  tft.setCursor((160 - tw) / 2, 52);
+  tft.print(t);
+
+  tft.setCursor((160 - 2 * 11 * 3) / 2, 106);
+  tft.print(dt.hour() < 12 ? "AM" : "PM");
 }
 #endif
 
@@ -219,22 +211,22 @@ void printAlarm(const DateTime& dt) {
 // ============================================================
 
 int drawEyes(int frame) {
-  animation_interval = 100;
   int step = frame % 16;
 
-  if (frame == 0) {
+  animation_interval = 500;
+
+  if (step == 0) {
+    tft.fillRect(0, 35, 160, 50, ST77XX_BLACK);
     setEyeColor();
     PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot1);
     animation_interval = random(1000, 10000);
-    return random(2) * 6;
-  }
-  if (step == 1) {
+  } else if (step == 1 || step == 7) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot2);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot2);
-  } else if (step == 2) {
+  } else if (step == 2 || step == 6) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot3);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot3);
-  } else if (step == 3) {
+  } else if (step == 3 || step == 5) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot4);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot4);
   } else if (step == 4) {
@@ -242,25 +234,26 @@ int drawEyes(int frame) {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot5);
     animation_interval = random(1000, 4000);
   } else if (step == 5) {
-    setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot5);
-    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot5);
-  } else if (step == 6) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot4);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot4);
-  } else if (step == 7) {
+  } else if (step == 6) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot3);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot3);
-  } else if (step == 8) {
+  } else if (step == 7) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot2);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot2);
+  } else if (step == 8) {
+    tft.fillRect(0, 35, 160, 50, ST77XX_BLACK);
+    setEyeColor();
+    PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot1);
     animation_interval = random(1000, 4000);
-  } else if (step == 9) {
+  } else if (step == 9 || step == 15) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot2);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot2);
-  } else if (step == 10) {
+  } else if (step == 10 || step == 14) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot3);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot3);
-  } else if (step == 11) {
+  } else if (step == 11 || step == 13) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot4);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot4);
   } else if (step == 12) {
@@ -268,15 +261,16 @@ int drawEyes(int frame) {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot5);
     animation_interval = random(1000, 4000);
   } else if (step == 13) {
-    setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot5);
-    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot5);
-  } else if (step == 14) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot4);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot4);
-  } else if (step == 15) {
+  } else if (step == 14) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot3);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot3);
+  } else if (step == 15) {
+    setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(black_pixels_astrobot2);
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot2);
   }
+
   return frame;
 }
 
@@ -286,44 +280,41 @@ int drawEyes(int frame) {
 
 int drawHearts(int frame) {
   animation_interval = 200;
-  if (frame == 0) {
+  int s = frame % 17;
+  if (s == 0) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot11);
-  } else if (frame == 1) {
+  } else if (s == 1) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot12);
-  } else if (frame == 2) {
+  } else if (s == 2) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot13);
-  } else if (frame == 3) {
+  } else if (s == 3) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot14);
-  } else if (frame == 4) {
+  } else if (s == 4) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot15);
-  } else if (frame == 5) {
+  } else if (s == 5) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot16);
-  } else if (frame == 6) {
+  } else if (s == 6) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot17);
-  } else if (frame == 7) {
+  } else if (s == 7) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot18);
-  } else if (frame == 8) {
+  } else if (s == 8) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot19);
+  } else if (s == 9) {
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot18);
+  } else if (s == 10) {
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot17);
+  } else if (s == 11) {
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot16);
+  } else if (s == 12) {
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot15);
+  } else if (s == 13) {
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot14);
+  } else if (s == 14) {
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot13);
+  } else if (s == 15) {
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot12);
   } else {
-    int s = frame % 8;
-    if (s == 1) {
-      setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot20);
-    } else if (s == 2) {
-      setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot21);
-    } else if (s == 3) {
-      setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot22);
-    } else if (s == 4) {
-      setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot23);
-    } else if (s == 5) {
-      setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot23);
-    } else if (s == 6) {
-      setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot22);
-    } else if (s == 7) {
-      setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot21);
-    } else {
-      setBlackColor(); PROCESS_PIXEL_ARRAY(white_pixels_astrobot20);
-      animation_interval = 500;
-    }
+    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot11);
   }
   return frame;
 }
