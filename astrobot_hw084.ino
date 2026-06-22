@@ -7,7 +7,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
 #include <RTClib.h>
-#include <Fonts/FreeMonoBold9pt7b.h>
+#include "Micro5_Clock.h"
 #include "pixel_data.h"
 #include "notes.h"
 
@@ -94,7 +94,7 @@ void setupLCD() {
   digitalWrite(TFT_BL, HIGH);
   tft.initR(INITR_BLACKTAB);
   tft.setRotation(1);
-  tft.fillScreen(ST77XX_BLACK);
+  tft.fillScreen(ST7735_BLACK);
 }
 
 void setup() {
@@ -150,8 +150,8 @@ void process_pixel_array_double_invert(unsigned char pixels[][2], int size) {
 
 unsigned long animation_interval = 200;
 
-void setBlackColor()   { setColor(ST77XX_BLACK); }
-void setEyeColor()     { setColor(tft.color565(180, 180, 180)); }
+void setBlackColor()   { setColor(ST7735_BLACK); }
+void setEyeColor()     { setColor(ST7735_BLUE); }
 void setHeartColor()   { setColor(tft.color565(255, 0, 0)); }
 
 // ============================================================
@@ -169,15 +169,16 @@ void printDate(const DateTime& dt) {
   t[4] = '0' + dt.minute() % 10;
   t[5] = '\0';
 
-  tft.setFont(&FreeMonoBold9pt7b);
-  tft.setTextColor(tft.color565(255, 255, 255), ST77XX_BLACK);
-  tft.setTextSize(3);
+  tft.setFont(&Micro5_Clock);
+  tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
+  tft.setTextSize(1);
 
-  int16_t tw = 5 * 11 * 3;
-  tft.setCursor((160 - tw) / 2, 52);
+  tft.setCursor(10, 60);
   tft.print(t);
 
-  tft.setCursor((160 - 2 * 11 * 3) / 2, 106);
+  tft.setFont(NULL);
+  tft.setTextSize(4);
+  tft.setCursor(60, 80);
   tft.print(dt.hour() < 12 ? "AM" : "PM");
 }
 
@@ -193,15 +194,16 @@ void printAlarm(const DateTime& dt) {
   t[4] = '0' + dt.minute() % 10;
   t[5] = '\0';
 
-  tft.setFont(&FreeMonoBold9pt7b);
-  tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
-  tft.setTextSize(3);
+  tft.setFont(&Micro5_Clock);
+  tft.setTextColor(ST7735_RED, ST7735_BLACK);
+  tft.setTextSize(1);
 
-  int16_t tw = 5 * 11 * 3;
-  tft.setCursor((160 - tw) / 2, 52);
+  tft.setCursor(10, 60);
   tft.print(t);
 
-  tft.setCursor((160 - 2 * 11 * 3) / 2, 106);
+  tft.setFont(NULL);
+  tft.setTextSize(4);
+  tft.setCursor(60, 80);
   tft.print(dt.hour() < 12 ? "AM" : "PM");
 }
 #endif
@@ -216,7 +218,7 @@ int drawEyes(int frame) {
   animation_interval = 500;
 
   if (step == 0) {
-    tft.fillRect(0, 35, 160, 50, ST77XX_BLACK);
+    tft.fillRect(0, 35, 160, 50, ST7735_BLACK);
     setEyeColor();
     PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot1);
     animation_interval = random(1000, 10000);
@@ -243,7 +245,7 @@ int drawEyes(int frame) {
     setEyeColor(); PROCESS_PIXEL_ARRAY_DOUBLE(black_pixels_astrobot2);
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot2);
   } else if (step == 8) {
-    tft.fillRect(0, 35, 160, 50, ST77XX_BLACK);
+    tft.fillRect(0, 35, 160, 50, ST7735_BLACK);
     setEyeColor();
     PROCESS_PIXEL_ARRAY_DOUBLE_INVERT(white_pixels_astrobot1);
     animation_interval = random(1000, 4000);
@@ -280,7 +282,7 @@ int drawEyes(int frame) {
 
 int drawHearts(int frame) {
   animation_interval = 200;
-  int s = frame % 17;
+  int s = frame % 13;
   if (s == 0) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot11);
   } else if (s == 1) {
@@ -296,22 +298,14 @@ int drawHearts(int frame) {
   } else if (s == 6) {
     setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot17);
   } else if (s == 7) {
-    setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot18);
-  } else if (s == 8) {
-    setHeartColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot19);
-  } else if (s == 9) {
-    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot18);
-  } else if (s == 10) {
-    setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot17);
-  } else if (s == 11) {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot16);
-  } else if (s == 12) {
+  } else if (s == 8) {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot15);
-  } else if (s == 13) {
+  } else if (s == 9) {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot14);
-  } else if (s == 14) {
+  } else if (s == 10) {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot13);
-  } else if (s == 15) {
+  } else if (s == 11) {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot12);
   } else {
     setBlackColor(); PROCESS_PIXEL_ARRAY_DOUBLE(white_pixels_astrobot11);
@@ -320,7 +314,7 @@ int drawHearts(int frame) {
 }
 
 void clearScreen() {
-  tft.fillScreen(ST77XX_BLACK);
+  tft.fillScreen(ST7735_BLACK);
 }
 
 // ============================================================
@@ -394,7 +388,7 @@ State previousState = SHOW_DATE;
 State currentState = SHOW_DATE;
 
 unsigned long stateChangeMillis = 0;
-const unsigned long stateChangeIntervalTimer = 5000;
+const unsigned long stateChangeIntervalTimer = 5500;
 const unsigned long stateChangeIntervalEye = 10000;
 
 unsigned long animation_started = 0;
